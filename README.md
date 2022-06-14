@@ -4,7 +4,22 @@
 
 A template for building skids that use palletjack to update AGOL data from a tabular data source and that are run as Google Cloud Functions
 
-For an example of a working skid, see the [erap-skid](https://github.com/agrc/erap-skid).
+For an example of a working skid, see [erap-skid](https://github.com/agrc/erap-skid) or [uorg-skid](https://github.com/agrc/uorg-skid).
+
+## Creating a Git Repository
+
+The first step in creating a skid is to create a new repository in GitHub that uses this repo as a template. You'll then clone the repo to your computer and start developing.
+
+1. Create a new repo in <https://github.com/agrc>
+   - Under `Repository template`, choose `agrc/skid`
+   - Name it `projectname-skid` so that everyone knows it's a skid
+   - Make it a Public repo
+   - Leave everything else alone (the template will take care of it all).
+1. Clone the repo on your local computer
+   - Use GitHub Desktop or any terminal with the git cli installed.
+   - git cli commands:
+      - `cd c:\where\you\store\git\repos`
+      - `git clone https://github.com/agrc/projectname-skid`
 
 ## Initial Skid Development
 
@@ -15,12 +30,13 @@ This all presumes you're working in Virtual Studio Code.
 1. Create new environment for the project and install Python
    - `conda create --name PROJECT_NAME python=3.7`
    - `conda activate PROJECT_NAME`
+1. Open the repo folder in VS Code
 1. Rename `src/skidname` folder to your desired skid name
 1. Edit the `setup.py:name, url, description, keywords, and entry_points` to reflect your new skid name
 1. Edit the `test_skidname.py` to match your skid name.
    - You will have one `test_filename.py` file for each program file in your `src` directory and you will write tests for the specific file in the `test_filename.py` file
 1. Install the skid in your conda environment as an editable package for development
-   - This will install all the runtime and development dependencies (palletjack, supervisor, etc)
+   - This will install all the normal and development dependencies (palletjack, supervisor, etc)
    - `cd c:\path\to\repo`
    - `pip install -e .[tests]`
    - add any additional project requirements to the `setup.py:install_requires` list
