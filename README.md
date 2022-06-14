@@ -28,7 +28,7 @@ You'll need to do a few steps to set up your environment to develop a skid. You 
 This all presumes you're working in Virtual Studio Code.
 
 1. Create new environment for the project and install Python
-   - `conda create --name PROJECT_NAME python=3.7`
+   - `conda create --name PROJECT_NAME python=3.8`
    - `conda activate PROJECT_NAME`
 1. Open the repo folder in VS Code
 1. Rename `src/skidname` folder to your desired skid name
