@@ -25,7 +25,7 @@ The first step in creating a skid is to create a new repository in GitHub that u
 
 You'll need to do a few steps to set up your environment to develop a skid. You may also want to make sure you've got the skid working locally before adding the complexity of the cloud function.
 
-This all presumes you're working in Virtual Studio Code.
+This all presumes you're working in Visual Studio Code.
 
 1. Create new environment for the project and install Python
    - `conda create --name PROJECT_NAME python=3.8`
