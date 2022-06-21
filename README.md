@@ -62,14 +62,14 @@ This all presumes you're working in Visual Studio Code.
 `functions-framework` allows you to run your code in a local framework that mirrors the Google Cloud Functions environment. This lets you make sure it's configured to run properly when called through the cloud process. If you keep the framework of this template, this should start running just fine.
 
 1. Navigate to the package folder within `src`:
-   - `cd c:\path\to\repo\src\erap`
+   - `cd c:\path\to\repo\src\skidname`
 1. Start the local functions framework server. This will attempt to load the function and prepare it to be run, but doesn't actually call it.
    - `functions-framework --target=main --signature-type=event`
 1. Open a bash shell (`git-bash` if you installed git for Windows) and run the pubsub.sh script to call the function itself with an HTTP request via curl:
    - `/c/path/to/repo/pubsub.sh`
    - It has to be a bash shell, I can't figure out how to get cmd.exe to send properly-formatted JSON
 
-The bash shell will just return an HTTP response. The other terminal you used to run functions-framework should show anything you send to stdout/stderr (print() statements, logging to console, etc) for debugging purposes
+The bash shell will return an HTTP response. The other terminal you used to run functions-framework should show anything you sent to stdout/stderr (print() statements, logging to console, etc) for debugging purposes
 
 If you make changes to your code, you need to kill (ctrl-c) and restart functions-framework to load them.
 
@@ -79,12 +79,12 @@ Skids run as Cloud Functions triggered by Cloud Scheduler sending a notification
 
 Work with the GCP maestros to set up a Google project via terraform. They can use the erap configuration as a starting point. Skids use some or all of the following GCP resources:
 
-- Cloud Function (obviously)
+- Cloud Functions (executes the python)
 - Cloud Storage (writing the data files and log files for mid-term retention)
   - Set a data retention policy on the storage bucket for file rotation (90 days is good for a weekly process)
 - Cloud Scheduler (sends a notification to a pub/sub topic)
 - Cloud Pub/Sub (creates a topic that links Scheduler and the cloud function)
-- Secrets Manager
+- Secret Manager
   - A `secrets.json` with the requisite login info
   - A `known_hosts` file (for loading from sftp) or a service account private key file (for loading from Google Sheets)
 
