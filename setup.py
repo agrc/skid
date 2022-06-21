@@ -38,9 +38,9 @@ setup(
     },
     keywords=['gis'],
     install_requires=[
-        'arcgis',  #==1.9.*',
-        'ugrc-palletjack',  #==2.2.*',
-        'agrc-supervisor',  #==3.0.*',
+        'arcgis==2.0.*',
+        'ugrc-palletjack==2.2.*',
+        'agrc-supervisor==3.0.*',
     ],
     extras_require={
         'tests': [
