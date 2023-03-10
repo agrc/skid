@@ -38,28 +38,29 @@ setup(
     },
     keywords=['gis'],
     install_requires=[
-        'arcgis==2.0.*',
-        'ugrc-palletjack==2.2.*',
+        'arcgis==2.1.*',
+        'ugrc-palletjack==3.0.*',
         'agrc-supervisor==3.0.*',
     ],
     extras_require={
         'tests': [
             'pylint-quotes~=0.2',
-            'pylint~=2.11',
-            'pytest-cov~=3.0',
+            'pylint~=2.15',
+            'pytest-cov~=4.0',
             'pytest-instafail~=0.4',
-            'pytest-isort~=2.0',
-            'pytest-pylint~=0.18',
+            'pytest-isort~=3.1',
+            'pytest-pylint~=0.19',
             'pytest-watch~=4.2',
-            'pytest~=6.0',
-            'yapf~=0.31',
-            'functions-framework',
+            'pytest~=7.2',
+            'yapf~=0.32',
+            'pytest-mock==3.10.*',
+            'functions-framework~=3.3',
         ]
     },
     setup_requires=[
         'pytest-runner',
     ],
     entry_points={'console_scripts': [
-        'skidname = skidname.main:main',
+        'command = package.module:function',
     ]},
 )

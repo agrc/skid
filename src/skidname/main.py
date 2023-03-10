@@ -12,9 +12,7 @@ from tempfile import TemporaryDirectory
 from types import SimpleNamespace
 
 import arcgis
-from palletjack import (
-    FeatureServiceAttachmentsUpdater, FeatureServiceInlineUpdater, GoogleDriveDownloader, GSheetLoader
-)
+from palletjack import extract, transform, load, utils
 from supervisor.message_handlers import SendGridHandler
 from supervisor.models import MessageDetails, Supervisor
 
@@ -118,6 +116,7 @@ def _remove_log_file_handlers(log_name, loggers):
             except Exception as error:
                 pass
 
+
 def process():
     """The main function that does all the work.
     """
@@ -167,8 +166,6 @@ def process():
         _remove_log_file_handlers(log_name, loggers)
 
 
-
-
 def main(event, context):  # pylint: disable=unused-argument
     """Entry point for Google Cloud Function triggered by pub/sub event
 
@@ -197,6 +194,7 @@ def main(event, context):  # pylint: disable=unused-argument
 
     #: Call process() and any other functions you want to be run as part of the skid here.
     process()
+
 
 #: Putting this here means you can call the file via `python main.py` and it will run. Useful for pre-GCF testing.
 if __name__ == '__main__':
