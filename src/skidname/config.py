@@ -10,10 +10,10 @@ SKID_NAME = ''
 
 #: Try to get project id from GCP metadata server for hostname. If it's empty or errors out, revert to local hostname
 try:
-    url = 'http://metadata.google.internal/computeMetadata/v1/project/project-id'
+    url = 'http://metadata.google.internal/computeMetadata/v1/project/project-id'  # pylint: disable=invalid-name
     req = urllib.request.Request(url)
     req.add_header('Metadata-Flavor', 'Google')
-    project_id = urllib.request.urlopen(req).read().decode()
+    project_id = urllib.request.urlopen(req).read().decode()  # pylint: disable=consider-using-with
     if not project_id:
         raise ValueError
     HOST_NAME = project_id
@@ -33,6 +33,4 @@ FEATURE_LAYER_ITEMID = ''
 JOIN_COLUMN = ''
 ATTACHMENT_LINK_COLUMN = ''
 ATTACHMENT_PATH_COLUMN = ''
-FIELDS = {
-
-}
+FIELDS = {}
