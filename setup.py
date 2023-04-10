@@ -11,8 +11,8 @@ from setuptools import find_packages, setup
 
 #: Load version from source file
 version = {}
-with open('src/skidname/version.py') as fp:
-    exec(fp.read(), version)
+with open('src/skidname/version.py', encoding='utf-8') as fp:
+    exec(fp.read(), version)  # pylint: disable=exec-used
 
 setup(
     name='skidname',
