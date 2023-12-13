@@ -47,11 +47,11 @@ setup(
             "pytest-instafail==0.5.*",
             "pytest-mock==3.*",
             "pytest-ruff==0.*",
-            "pytest-watch~=4.*",
+            "pytest-watch==4.*",
             "pytest>=6,<8",
-            "black>=23.3,<23.10",
+            "black>=23.3,<23.12",
             "ruff==0.0.*",
-            "functions-framework",
+            "functions-framework==3.4.*",
         ]
     },
     setup_requires=[
