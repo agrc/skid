@@ -16,7 +16,6 @@ env:
   SCHEDULE_NAME: monday-morning
   SCHEDULE_CRON: 0 9 * * 1
 
-
 concurrency:
   group: "${{ github.head_ref || github.ref }}"
   cancel-in-progress: true
