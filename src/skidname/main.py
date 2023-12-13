@@ -113,7 +113,7 @@ def _remove_log_file_handlers(log_name, loggers):
                 if log_name in handler.stream.name:
                     logger.removeHandler(handler)
                     handler.close()
-            except Exception as error:
+            except Exception:
                 pass
 
 
@@ -139,6 +139,23 @@ def process():
         #########################################################################
         #: Use the various palletjack classes and other code to do your work here
         #########################################################################
+
+        module_logger.info("Log messages with module_logger.info() or module_logger.debug()")
+
+        #: Create a extract object to load your new data
+        extractor = extract.PostgresLoader("host", "database", "user", "password")
+        new_data_df = extractor.read_table_into_dataframe("table_name", "index_column", "crs", "shape_column")
+
+        #: Transform your data
+        new_data_df = new_data_df["new_column"] = "do custom tranform stuff here"
+        new_data_df = transform.DataCleaning.rename_dataframe_columns_for_agol(new_data_df)
+
+        #: Use retry for operations that may fail randomly (network issues, etc)
+        utils.retry("method_to_retry", "arg1", keyword_arg="arg2")
+
+        #: Create a load object to load your new data
+        loader = load.FeatureServiceUpdater(gis, "item_id")
+        loader.update_features(new_data_df)
 
         end = datetime.now()
 
