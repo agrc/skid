@@ -147,7 +147,7 @@ def process():
         new_data_df = extractor.read_table_into_dataframe("table_name", "index_column", "crs", "shape_column")
 
         #: Transform your data
-        new_data_df = new_data_df["new_column"] = "do custom tranform stuff here"
+        new_data_df = new_data_df["new_column"] = "do custom transform stuff here"
         new_data_df = transform.DataCleaning.rename_dataframe_columns_for_agol(new_data_df)
 
         #: Use retry for operations that may fail randomly (network issues, etc)
