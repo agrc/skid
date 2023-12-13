@@ -12,9 +12,7 @@ from tempfile import TemporaryDirectory
 from types import SimpleNamespace
 
 import arcgis
-from palletjack import (
-    FeatureServiceAttachmentsUpdater, FeatureServiceInlineUpdater, GoogleDriveDownloader, GSheetLoader
-)
+from palletjack import extract, load, transform, utils
 from supervisor.message_handlers import SendGridHandler
 from supervisor.models import MessageDetails, Supervisor
 
@@ -37,18 +35,18 @@ def _get_secrets():
         dict: The secrets .json loaded as a dictionary
     """
 
-    secret_folder = Path('/secrets')
+    secret_folder = Path("/secrets")
 
     #: Try to get the secrets from the Cloud Function mount point
     if secret_folder.exists():
-        return json.loads(Path('/secrets/app/secrets.json').read_text(encoding='utf-8'))
+        return json.loads(Path("/secrets/app/secrets.json").read_text(encoding="utf-8"))
 
     #: Otherwise, try to load a local copy for local development
-    secret_folder = (Path(__file__).parent / 'secrets')
+    secret_folder = Path(__file__).parent / "secrets"
     if secret_folder.exists():
-        return json.loads((secret_folder / 'secrets.json').read_text(encoding='utf-8'))
+        return json.loads((secret_folder / "secrets.json").read_text(encoding="utf-8"))
 
-    raise FileNotFoundError('Secrets folder not found; secrets not loaded.')
+    raise FileNotFoundError("Secrets folder not found; secrets not loaded.")
 
 
 def _initialize(log_path, sendgrid_api_key):
@@ -64,17 +62,17 @@ def _initialize(log_path, sendgrid_api_key):
 
     skid_logger = logging.getLogger(config.SKID_NAME)
     skid_logger.setLevel(config.LOG_LEVEL)
-    palletjack_logger = logging.getLogger('palletjack')
+    palletjack_logger = logging.getLogger("palletjack")
     palletjack_logger.setLevel(config.LOG_LEVEL)
 
     cli_handler = logging.StreamHandler(sys.stdout)
     cli_handler.setLevel(config.LOG_LEVEL)
     formatter = logging.Formatter(
-        fmt='%(levelname)-7s %(asctime)s %(name)15s:%(lineno)5s %(message)s', datefmt='%Y-%m-%d %H:%M:%S'
+        fmt="%(levelname)-7s %(asctime)s %(name)15s:%(lineno)5s %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
     )
     cli_handler.setFormatter(formatter)
 
-    log_handler = logging.FileHandler(log_path, mode='w')
+    log_handler = logging.FileHandler(log_path, mode="w")
     log_handler.setLevel(config.LOG_LEVEL)
     log_handler.setFormatter(formatter)
 
@@ -88,10 +86,10 @@ def _initialize(log_path, sendgrid_api_key):
     #: (all log messages were duplicated if put at beginning)
     logging.captureWarnings(True)
 
-    skid_logger.debug('Creating Supervisor object')
+    skid_logger.debug("Creating Supervisor object")
     skid_supervisor = Supervisor(handle_errors=False)
     sendgrid_settings = config.SENDGRID_SETTINGS
-    sendgrid_settings['api_key'] = sendgrid_api_key
+    sendgrid_settings["api_key"] = sendgrid_api_key
     skid_supervisor.add_message_handler(
         SendGridHandler(
             sendgrid_settings=sendgrid_settings, client_name=config.SKID_NAME, client_version=version.__version__
@@ -118,9 +116,9 @@ def _remove_log_file_handlers(log_name, loggers):
             except Exception as error:
                 pass
 
+
 def process():
-    """The main function that does all the work.
-    """
+    """The main function that does all the work."""
 
     #: Set up secrets, tempdir, supervisor, and logging
     start = datetime.now()
@@ -145,28 +143,26 @@ def process():
         end = datetime.now()
 
         summary_message = MessageDetails()
-        summary_message.subject = f'{config.SKID_NAME} Update Summary'
+        summary_message.subject = f"{config.SKID_NAME} Update Summary"
         summary_rows = [
             f'{config.SKID_NAME} update {start.strftime("%Y-%m-%d")}',
-            '=' * 20,
-            '',
+            "=" * 20,
+            "",
             f'Start time: {start.strftime("%H:%M:%S")}',
             f'End time: {end.strftime("%H:%M:%S")}',
-            f'Duration: {str(end-start)}',
+            f"Duration: {str(end-start)}",
             #: Add other rows here containing summary info captured/calculated during the working portion of the skid,
             #: like the number of rows updated or the number of successful attachment overwrites.
         ]
 
-        summary_message.message = '\n'.join(summary_rows)
+        summary_message.message = "\n".join(summary_rows)
         summary_message.attachments = tempdir_path / log_name
 
         skid_supervisor.notify(summary_message)
 
         #: Remove file handler so the tempdir will close properly
-        loggers = [logging.getLogger(config.SKID_NAME), logging.getLogger('palletjack')]
+        loggers = [logging.getLogger(config.SKID_NAME), logging.getLogger("palletjack")]
         _remove_log_file_handlers(log_name, loggers)
-
-
 
 
 def main(event, context):  # pylint: disable=unused-argument
@@ -198,6 +194,7 @@ def main(event, context):  # pylint: disable=unused-argument
     #: Call process() and any other functions you want to be run as part of the skid here.
     process()
 
+
 #: Putting this here means you can call the file via `python main.py` and it will run. Useful for pre-GCF testing.
-if __name__ == '__main__':
+if __name__ == "__main__":
     process()
