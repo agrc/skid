@@ -80,7 +80,7 @@ jobs:
         timeout-minutes: 10
         with:
           name: projectname-skid
-          runtime: python38
+          runtime: python311
           entry_point: main
           source_dir: src/skidname
           service_account: cloud-function-sa@${{ secrets.PROJECT_ID }}.iam.gserviceaccount.com
@@ -150,7 +150,7 @@ jobs:
         timeout-minutes: 10
         with:
           name: projectname-skid
-          runtime: python38
+          runtime: python311
           entry_point: main
           source_dir: src/projectname
           service_account: cloud-function-sa@${{ secrets.PROJECT_ID }}.iam.gserviceaccount.com
