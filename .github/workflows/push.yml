@@ -105,15 +105,14 @@ jobs:
           for i in $(gcloud scheduler jobs list --location=us-central1 --uri); do
             gcloud scheduler jobs delete $i --quiet
           done
-          gcloud scheduler jobs create http saturday-evening \
-            gcloud scheduler jobs update pubsub $SCHEDULE_NAME \
-              --description="$SCHEDULE_DESCRIPTION" \
-              --schedule="$SCHEDULE_CRON" \
-              --time-zone=America/Denver \
-              --location=us-central1 \
-              --topic=$SCHEDULE_NAME-topic \
-              --message-body='{"run": "now"}' \
-              --quiet
+          gcloud scheduler jobs create pubsub $SCHEDULE_NAME \
+            --description="$SCHEDULE_DESCRIPTION" \
+            --schedule="$SCHEDULE_CRON" \
+            --time-zone=America/Denver \
+            --location=us-central1 \
+            --topic=$SCHEDULE_NAME-topic \
+            --message-body='{"run": "now"}' \
+            --quiet
 
   deploy-prod:
     name: Deploy to GCF
@@ -171,11 +170,11 @@ jobs:
           for i in $(gcloud scheduler jobs list --location=us-central1 --uri); do
             gcloud scheduler jobs delete $i --quiet
           done
-            gcloud scheduler jobs update pubsub $SCHEDULE_NAME \
-              --description="$SCHEDULE_DESCRIPTION" \
-              --schedule="$SCHEDULE_CRON" \
-              --time-zone=America/Denver \
-              --location=us-central1 \
-              --topic=$SCHEDULE_NAME-topic \
-              --message-body='{"run": "now"}' \
-              --quiet
+          gcloud scheduler jobs create pubsub $SCHEDULE_NAME \
+            --description="$SCHEDULE_DESCRIPTION" \
+            --schedule="$SCHEDULE_CRON" \
+            --time-zone=America/Denver \
+            --location=us-central1 \
+            --topic=$SCHEDULE_NAME-topic \
+            --message-body='{"run": "now"}' \
+            --quiet
