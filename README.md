@@ -18,8 +18,8 @@ The first step in creating a skid is to create a new repository in GitHub that u
 1. Clone the repo on your local computer
    - Use GitHub Desktop or any terminal with the git cli installed.
    - git cli commands:
-      - `cd c:\where\you\store\git\repos`
-      - `git clone https://github.com/agrc/projectname-skid`
+     - `cd c:\where\you\store\git\repos`
+     - `git clone https://github.com/agrc/projectname-skid`
 
 ## Initial Skid Development
 
