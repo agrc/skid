@@ -81,7 +81,7 @@ jobs:
         with:
           name: projectname-skid
           runtime: python311
-          entry_point: main
+          entry_point: subscribe
           source_dir: src/projectname
           service_account: cloud-function-sa@${{ secrets.PROJECT_ID }}.iam.gserviceaccount.com
           event_trigger_type: google.cloud.pubsub.topic.v1.messagePublished
@@ -111,7 +111,7 @@ jobs:
             --time-zone=America/Denver \
             --location=us-central1 \
             --topic=$SCHEDULE_NAME-topic \
-            --message-body='{"run": "now"}' \
+            --message-body='foo' \
             --quiet
 
   deploy-prod:
