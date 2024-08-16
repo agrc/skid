@@ -110,6 +110,10 @@ The actions rely on several GitHub secrets to do all this:
 - Project ID
 - Storage Bucket ID
 
+### Multiple Triggers with Different Schedules
+
+You can parameterize your function to do different things depending on the schedule that calls it. The `message-body` parameter of the schedule is available to the `subscribe` function in `main.py`. Therefore, you can create multiple schedules with different `message-body` values and then switch on those values. One example is to have a main script that updates on a regular basis, and then a utility script that gets run just a couple times a year.
+
 ### Handling Secrets and Configuration Files
 
 Skids use GCP Secrets Manager to make secrets available to the function. They are mounted as local files with a specified mounting directory (`/secrets`). In this mounting scheme, a folder can only hold a single secret, so multiple secrets are handled via nesting folders (ie, `/secrets/app` and `secrets/ftp`). These mount points are specified in the GitHub CI action workflow.
