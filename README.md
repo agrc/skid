@@ -77,7 +77,7 @@ If you make changes to your code, you need to kill (ctrl-c) and restart function
 
 Skids run as Cloud Functions triggered by Cloud Scheduler sending a notification to a pub/sub topic on a regular schedule.
 
-Work with the GCP maestros to set up a Google project via terraform. They can use the erap configuration as a starting point. Skids use some or all of the following GCP resources:
+Work with the GCP maestros to set up a Google project via terraform. They can use the wmrc configuration as a starting point. Skids use some or all of the following GCP resources:
 
 - Cloud Functions (executes the python)
 - Cloud Storage (writing the data files and log files for mid-term retention)
@@ -90,14 +90,25 @@ Work with the GCP maestros to set up a Google project via terraform. They can us
 
 ### Setup GitHub CI Pipeline
 
-Skids use a GitHub action to deploy the function, pub/sub topic, and scheduler action to the GCP project. They use the following GitHub secrets to do this:
+Skids use a series of GitHub actions to test, release, and deploy the skid, including deploying to both dev and prod GCP environments.
+
+The GCP deployment itself is found within the `deploy` composite action (`.github/actions/deploy/action.yml`). You will set the various GCP parameters (schedule, name, etc) in either the global variables in the `Set globals` step or directly in the main `Deploy Cloud Function` step.
+
+The cloud functions may need 512 MB or 1 GB of RAM to run successfully. The source dir should point to `src/skidname`. A cloud function just runs the specified function in the `main.py` file in the source dir; it doesn't pip install the function itself. It will pip install any dependencies listed in `src/skidname/requirements.txt`, however.
+
+The standard workflow, it goeth thusly:
+
+- Any pushes to the `dev` branch will deploy the skid to the dev GCP environment so that you can test your work in a real-world environment.
+- Opening a pull request on any branch triggers the tests to run.
+- Pushes to main (usually from merging a PR into main, but also direct pushes) will open a release PR to create a GitHub release with associated git tag and version bump.
+- Once the GitHub release is created by merging the release PR, the actions will deploy the skid to the prod GCP environment.
+
+The actions rely on several GitHub secrets to do all this:
 
 - Identity provider
 - GCP service account email
 - Project ID
 - Storage Bucket ID
-
-The cloud functions may need 512 MB or 1 GB of RAM to run successfully. The source dir should point to `src/skidname`. A cloud function just runs the specified function in the `main.py` file in the source dir; it doesn't pip install the function itself. It will pip install any dependencies listed in `setup.py`, however.
 
 ### Handling Secrets and Configuration Files
 

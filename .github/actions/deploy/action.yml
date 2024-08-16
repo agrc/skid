@@ -1,0 +1,116 @@
+name: Deploy to GCP
+description: Deploy to GCP
+inputs:
+  project_id:
+    description: "The GCP project ID"
+    required: true
+  identity_provider:
+    description: "The identity provider for the workload identity"
+    required: true
+  service_account_email:
+    description: "The service account email"
+    required: true
+  storage_bucket:
+    description: "The GCP storage bucket"
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Set globals
+      id: globals
+      shell: bash
+      run: |
+        echo "MAIN_SCHEDULE_NAME=skidname_main" >> "${GITHUB_OUTPUT}"
+        echo "MAIN_SCHEDULE_CRON=0 22 * * 6" >> "${GITHUB_OUTPUT}"
+        echo "MAIN_SCHEDULE_DESCRIPTION=Trigger the skidname-skid bot every saturday evening at 10pm" >> "${GITHUB_OUTPUT}"
+        echo "VALIDATOR_SCHEDULE_NAME=validator" >> "${GITHUB_OUTPUT}"
+        echo "VALIDATOR_SCHEDULE_DESCRIPTION=Trigger the skidname validation bot every 1st of April, May, and June at 8am" >> "${GITHUB_OUTPUT}"
+        echo "VALIDATOR_SCHEDULE_CRON=0 8 1 4-6 *" >> "${GITHUB_OUTPUT}"
+        echo "TOPIC_NAME=skidname-topic" >> "${GITHUB_OUTPUT}"
+
+    - name: ⬇️ Set up code
+      uses: actions/checkout@v4
+      with:
+        show-progress: false
+
+    - name: 🗝️ Authenticate to Google Cloud
+      id: auth
+      uses: google-github-actions/auth@v2
+      with:
+        create_credentials_file: true
+        token_format: access_token
+        workload_identity_provider: ${{ inputs.identity_provider }}
+        service_account: ${{ inputs.service_account_email }}
+
+    - name: 📥 Create Main PubSub topic
+      shell: bash
+      run: |
+        if [ ! "$(gcloud pubsub topics list | grep ${{ steps.globals.outputs.TOPIC_NAME }})" ]; then
+          gcloud pubsub topics create ${{ steps.globals.outputs.TOPIC_NAME }} --quiet
+        fi
+
+    - name: 🚀 Deploy Cloud Function
+      id: deploy
+      uses: google-github-actions/deploy-cloud-functions@v3
+      with:
+        name: skidname-skid
+        runtime: python311
+        entry_point: subscribe
+        source_dir: src/skidname
+        service_account: cloud-function-sa@${{ inputs.project_id }}.iam.gserviceaccount.com
+        event_trigger_type: google.cloud.pubsub.topic.v1.messagePublished
+        event_trigger_pubsub_topic: projects/${{ inputs.project_id }}/topics/${{ steps.globals.outputs.TOPIC_NAME }}
+        memory: 1024M
+        service_timeout: 9m
+        environment_variables: STORAGE_BUCKET=${{ inputs.storage_bucket }}
+        secrets: |
+          /secrets/app/secrets.json=${{ inputs.project_id }}/skid-secrets
+        max_instance_count: 1
+        event_trigger_retry: false
+
+    - name: 🕰️ Create Main Cloud Scheduler
+      shell: bash
+      run: |
+        if [ ! "$(gcloud scheduler jobs list --location=us-central1 | grep ${{ steps.globals.outputs.MAIN_SCHEDULE_NAME }})" ]; then
+          gcloud scheduler jobs create pubsub "${{ steps.globals.outputs.MAIN_SCHEDULE_NAME }}" \
+            --description="${{ steps.globals.outputs.MAIN_SCHEDULE_DESCRIPTION }}" \
+            --schedule="${{ steps.globals.outputs.MAIN_SCHEDULE_CRON }}" \
+            --time-zone=America/Denver \
+            --location=us-central1 \
+            --topic="${{ steps.globals.outputs.TOPIC_NAME }}" \
+            --message-body='run the skid' \
+            --quiet
+        else
+          gcloud scheduler jobs update pubsub "${{ steps.globals.outputs.MAIN_SCHEDULE_NAME }}" \
+            --description="${{ steps.globals.outputs.MAIN_SCHEDULE_DESCRIPTION }}" \
+            --schedule="${{ steps.globals.outputs.MAIN_SCHEDULE_CRON }}" \
+            --time-zone=America/Denver \
+            --location=us-central1 \
+            --topic="${{ steps.globals.outputs.TOPIC_NAME }}" \
+            --message-body='run the skid' \
+            --quiet
+        fi
+
+    - name: 🕰️ Create Validator Cloud Scheduler
+      shell: bash
+      run: |
+        if [ ! "$(gcloud scheduler jobs list --location=us-central1 | grep ${{ steps.globals.outputs.VALIDATOR_SCHEDULE_NAME }})" ]; then
+          gcloud scheduler jobs create pubsub "${{ steps.globals.outputs.VALIDATOR_SCHEDULE_NAME }}" \
+            --description="${{ steps.globals.outputs.VALIDATOR_SCHEDULE_DESCRIPTION }}" \
+            --schedule="${{ steps.globals.outputs.VALIDATOR_SCHEDULE_CRON }}" \
+            --time-zone=America/Denver \
+            --location=us-central1 \
+            --topic="${{ steps.globals.outputs.TOPIC_NAME }}" \
+            --message-body='validate' \
+            --quiet
+        else
+          gcloud scheduler jobs update pubsub "${{ steps.globals.outputs.VALIDATOR_SCHEDULE_NAME }}" \
+            --description="${{ steps.globals.outputs.VALIDATOR_SCHEDULE_DESCRIPTION }}" \
+            --schedule="${{ steps.globals.outputs.VALIDATOR_SCHEDULE_CRON }}" \
+            --time-zone=America/Denver \
+            --location=us-central1 \
+            --topic="${{ steps.globals.outputs.TOPIC_NAME }}" \
+            --message-body='validate' \
+            --quiet
+        fi
