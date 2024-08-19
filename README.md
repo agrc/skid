@@ -100,7 +100,7 @@ The standard workflow, it goeth thusly:
 
 - Any pushes to the `dev` branch will deploy the skid to the dev GCP environment so that you can test your work in a real-world environment.
 - Opening a pull request on any branch triggers the tests to run.
-- Pushes to main (usually from merging a PR into main, but also direct pushes) will open a release PR to create a GitHub release with associated git tag and version bump.
+- Pushes to main (usually from merging a PR into main, but also direct pushes) will open a release PR to create a GitHub release with an associated git tag and version bump if the commits pushed contain conventional commit types that trigger a release.
 - Once the GitHub release is created by merging the release PR, the actions will deploy the skid to the prod GCP environment.
 
 The actions rely on several GitHub secrets to do all this:
@@ -112,7 +112,7 @@ The actions rely on several GitHub secrets to do all this:
 
 ### Multiple Triggers with Different Schedules
 
-You can parameterize your function to do different things depending on the schedule that calls it. The `message-body` parameter of the schedule is available to the `subscribe` function in `main.py`. Therefore, you can create multiple schedules with different `message-body` values and then switch on those values. One example is to have a main script that updates on a regular basis, and then a utility script that gets run just a couple times a year.
+You can parameterize your function to perform different actions depending on the schedule that calls it. The `message-body` parameter of the PubSub topic schedule is available to the `subscribe` function in `main.py`. Therefore, you can create multiple schedules with different `message-body` values and switch the skid functionality based on the values. One example is to have a main routine that executes on a regular basis, and a utility routine that runs a couple times a year.
 
 ### Handling Secrets and Configuration Files
 
