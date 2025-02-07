@@ -3,6 +3,7 @@
 """
 Run the SKIDNAME script as a cloud function.
 """
+
 import base64
 import json
 import logging
@@ -130,7 +131,7 @@ def process():
 
     with TemporaryDirectory() as tempdir:
         tempdir_path = Path(tempdir)
-        log_name = f'{config.LOG_FILE_NAME}_{start.strftime("%Y%m%d-%H%M%S")}.txt'
+        log_name = f"{config.LOG_FILE_NAME}_{start.strftime('%Y%m%d-%H%M%S')}.txt"
         log_path = tempdir_path / log_name
 
         skid_supervisor = _initialize(log_path, secrets.SENDGRID_API_KEY)
@@ -165,12 +166,12 @@ def process():
         summary_message = MessageDetails()
         summary_message.subject = f"{config.SKID_NAME} Update Summary"
         summary_rows = [
-            f'{config.SKID_NAME} update {start.strftime("%Y-%m-%d")}',
+            f"{config.SKID_NAME} update {start.strftime('%Y-%m-%d')}",
             "=" * 20,
             "",
-            f'Start time: {start.strftime("%H:%M:%S")}',
-            f'End time: {end.strftime("%H:%M:%S")}',
-            f"Duration: {str(end-start)}",
+            f"Start time: {start.strftime('%H:%M:%S')}",
+            f"End time: {end.strftime('%H:%M:%S')}",
+            f"Duration: {str(end - start)}",
             #: Add other rows here containing summary info captured/calculated during the working portion of the skid,
             #: like the number of rows updated or the number of successful attachment overwrites.
         ]

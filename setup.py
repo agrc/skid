@@ -4,6 +4,7 @@
 setup.py
 A module that installs the SKIDNAME skid as a module
 """
+
 from pathlib import Path
 
 from setuptools import find_packages, setup
@@ -38,20 +39,19 @@ setup(
     },
     keywords=["gis"],
     install_requires=[
-        "ugrc-palletjack>=4.4.1,<4.5",
+        "ugrc-palletjack>=5.0,<5.2",
         "ugrc-supervisor>=3.1.3",
     ],
     extras_require={
         "tests": [
-            "pytest-cov>=3,<6",
+            "pytest-cov>=6",
             "pytest-instafail==0.5.*",
             "pytest-mock==3.*",
             "pytest-ruff==0.*",
             "pytest-watch==4.*",
-            "pytest>=6,<9",
-            "black>=24.4.2,<24.5",
+            "pytest>=7,<9",
             "ruff==0.*",
-            "functions-framework>=3.8.0,<3.9",
+            "functions-framework==3.8.*",
         ]
     },
     setup_requires=[
