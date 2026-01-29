@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1](https://github.com/agrc/skid/compare/v1.0.0...v1.0.1) (2026-01-29)
+
+
+### Dependencies
+
+* **dev:** update functions-framework requirement ([e8bf430](https://github.com/agrc/skid/commit/e8bf4307d9abf7f200061abda6812ab6f6517366))
+* **dev:** update pytest requirement from &lt;9,&gt;=7 to &gt;=7,&lt;10 ([5350132](https://github.com/agrc/skid/commit/5350132e4edbfa599ed7cd6f7b9ea898d46d2ad2))
+
 ## 1.0.0 (2025-07-30)
 
 
