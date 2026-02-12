@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/agrc/skid/compare/v1.0.1...v1.0.2) (2026-02-12)
+
+
+### Dependencies
+
+* update ugrc-palletjack requirement from &lt;5.3,&gt;=5.0 to &gt;=5.0,&lt;6.1 ([5e0d9e4](https://github.com/agrc/skid/commit/5e0d9e42e1bfeddcfaa140d6d746c564514ba5ef))
+
 ## [1.0.1](https://github.com/agrc/skid/compare/v1.0.0...v1.0.1) (2026-01-29)
 
 
