@@ -70,7 +70,7 @@ Work with the GCP maestros to set up a Google project via terraform. They can us
 
 ### Running Locally
 
-Because the Docker container is just `pip install`ing your module and running the entry point defined in `setup.py`, you can generally run your code locally by doing the same (it should already be installed in your conda environment in the development steps listed above). You can run it via VS Code's debugger as well.
+Because the Docker container is just `pip install`ing your module and running the entry point defined in `setup.py`, you can generally run your code locally by doing the same (it should already be installed in your conda environment in the development steps listed above). You can run it via VS Code's debugger as well running it as a module. A `.main` entry point is predefined in `.vscode/launch.json` (be sure to update `skidname` to match the folder name under `/src`).
 
 To test it in the Docker container's environment, you can run use the `Dockerfile` to create a container and run it locally using a tool like [Podman](https://podman.io/).
 
