@@ -2,7 +2,7 @@
 
 [![Push Events](https://github.com/agrc/skid/actions/workflows/push.yml/badge.svg)](https://github.com/agrc/skid/actions/workflows/push.yml)
 
-A template for building skids that use palletjack to update AGOL data from a tabular data source and that are run as Google Cloud Functions
+A template for building skids that use palletjack to update AGOL data from a tabular data source and that are run as Google Cloud Run Jobs
 
 For an example of a working skid, see [nfhl-skid](https://github.com/agrc/nfhl-skid) or [uocc-skid](https://github.com/agrc/uocc-skid).
 
