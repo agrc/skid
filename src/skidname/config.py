@@ -12,10 +12,11 @@ try:
     url = "http://metadata.google.internal/computeMetadata/v1/project/project-id"
     req = urllib.request.Request(url)
     req.add_header("Metadata-Flavor", "Google")
-    project_id = urllib.request.urlopen(req).read().decode()
-    if not project_id:
-        raise ValueError
-    HOST_NAME = project_id
+    with urllib.request.urlopen(req, timeout=15) as response:
+        project_id = response.read().decode()
+        if not project_id:
+            raise ValueError
+        HOST_NAME = project_id
 except Exception:
     HOST_NAME = socket.gethostname()
 
