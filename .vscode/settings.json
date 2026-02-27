@@ -1,6 +1,7 @@
 {
   "cSpell.words": [
     "accesstoken",
+    "addopts",
     "agrc",
     "arcgis",
     "arcpy",
@@ -9,11 +10,16 @@
     "Codecov",
     "finditer",
     "getenv",
+    "gethostname",
     "instafail",
     "libkrb",
+    "localedef",
     "mapserv",
     "metatable",
+    "minversion",
     "mssql",
+    "nfhl",
+    "norecursedirs",
     "ODBC",
     "oidc",
     "opensgid",
@@ -23,11 +29,14 @@
     "pygsheets",
     "pyodbc",
     "pytest",
+    "PYTHONUNBUFFERED",
     "rindex",
     "sgid",
     "skidname",
     "skinname",
+    "testpaths",
     "UGRC",
+    "uocc",
     "venv",
     "worknote"
   ],
@@ -48,5 +57,7 @@
   "[python]": {
     "editor.defaultFormatter": "charliermarsh.ruff",
     "editor.formatOnSave": true
-  }
+  },
+  "python-envs.defaultEnvManager": "ms-python.python:conda",
+  "python-envs.defaultPackageManager": "ms-python.python:conda"
 }
