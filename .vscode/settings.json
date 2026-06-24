@@ -8,6 +8,7 @@
     "Buildx",
     "cloudrun",
     "Codecov",
+    "cooldown",
     "finditer",
     "getenv",
     "gethostname",
