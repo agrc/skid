@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# * coding: utf8 *
 """
 Run the SKIDNAME script as a Cloud Run Job or console entry point.
 """
@@ -7,7 +5,8 @@ Run the SKIDNAME script as a Cloud Run Job or console entry point.
 import json
 import logging
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
+from importlib.metadata import version
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from types import SimpleNamespace
@@ -17,7 +16,7 @@ from palletjack import extract, load, transform, utils
 from supervisor.message_handlers import SendGridHandler
 from supervisor.models import MessageDetails, Supervisor
 
-from . import config, version
+from . import config
 
 
 def _get_secrets():
@@ -87,7 +86,7 @@ def _initialize(log_path, sendgrid_api_key):
     sendgrid_settings["api_key"] = sendgrid_api_key
     skid_supervisor.add_message_handler(
         SendGridHandler(
-            sendgrid_settings=sendgrid_settings, client_name=config.SKID_NAME, client_version=version.__version__
+            sendgrid_settings=sendgrid_settings, client_name=config.SKID_NAME, client_version=version("skidname")
         )
     )
 
@@ -104,19 +103,16 @@ def _remove_log_file_handlers(log_name, loggers):
 
     for logger in loggers:
         for handler in logger.handlers:
-            try:
-                if log_name in handler.stream.name:
-                    logger.removeHandler(handler)
-                    handler.close()
-            except Exception:
-                pass
+            if isinstance(handler, logging.FileHandler) and Path(handler.baseFilename).name == log_name:
+                logger.removeHandler(handler)
+                handler.close()
 
 
 def process():
     """The main function that does all the work."""
 
     #: Set up secrets, tempdir, supervisor, and logging
-    start = datetime.now()
+    start = datetime.now(timezone.utc)
 
     secrets = SimpleNamespace(**_get_secrets())
 
@@ -152,7 +148,7 @@ def process():
         loader = load.FeatureServiceUpdater(gis, "item_id")
         loader.update_features(new_data_df)
 
-        end = datetime.now()
+        end = datetime.now(timezone.utc)
 
         summary_message = MessageDetails()
         summary_message.subject = "Update Summary"
@@ -162,7 +158,7 @@ def process():
             "",
             f"Start time: {start.strftime('%H:%M:%S')}",
             f"End time: {end.strftime('%H:%M:%S')}",
-            f"Duration: {str(end - start)}",
+            f"Duration: {end - start!s}",
             #: Add other rows here containing summary info captured/calculated during the working portion of the skid,
             #: like the number of rows updated or the number of successful attachment overwrites.
         ]

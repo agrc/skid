@@ -5,6 +5,7 @@ config.py: Configuration values. Secrets to be handled with Secrets Manager
 import logging
 import socket
 import urllib.request
+from urllib.error import URLError
 
 SKID_NAME = ""
 
@@ -17,7 +18,7 @@ try:
         if not project_id:
             raise ValueError
         HOST_NAME = project_id
-except Exception:
+except (TimeoutError, URLError, ValueError):
     HOST_NAME = socket.gethostname()
 
 AGOL_ORG = "https://utah.maps.arcgis.com"

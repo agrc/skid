@@ -29,6 +29,7 @@
     "psycopg",
     "pygsheets",
     "pyodbc",
+    "pyproject",
     "pytest",
     "PYTHONUNBUFFERED",
     "rindex",
