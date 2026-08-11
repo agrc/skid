@@ -23,15 +23,15 @@ This all presumes you're working in Visual Studio Code.
    - `conda activate PROJECT_NAME`
 1. Open the repo folder in VS Code
 1. Rename `src/skidname` folder to your desired skid name
-1. Edit the `setup.py:name, url, description, keywords, and entry_points` to reflect your new skid name
+1. Edit the project metadata in `pyproject.toml` to reflect your new skid name
 1. Edit the `test_skidname.py` to match your skid name.
    - You will have one `test_filename.py` file for each program file in your `src` directory and you will write tests for the specific file in the `test_filename.py` file
-1. Reset the version to 1.0.0 in `version.py`
+1. Reset the version to 1.0.0 in `pyproject.toml`
 1. Install the skid in your conda environment as an editable package for development
    - This will install all the normal and development dependencies (palletjack, supervisor, etc)
    - `cd c:\path\to\repo`
    - `pip install -e .[tests]`
-   - add any additional project requirements to the `setup.py:install_requires` list
+   - add any additional project requirements to the `project.dependencies` list in `pyproject.toml`
 1. Set config variables and secrets
    - `secrets.json` holds passwords, secret keys, etc, and will not (and should not) be tracked in git
    - `config.py` holds all the other configuration variables that can be publicly exposed in git
@@ -70,7 +70,7 @@ Work with the GCP maestros to set up a Google project via terraform. They can us
 
 ### Running Locally
 
-Because the Docker container is just `pip install`ing your module and running the entry point defined in `setup.py`, you can generally run your code locally by doing the same (it should already be installed in your conda environment in the development steps listed above). You can run it via VS Code's debugger as well running it as a module. A `.main` entry point is predefined in `.vscode/launch.json` (be sure to update `skidname` to match the folder name under `/src`).
+Because the Docker container is just `pip install`ing your module and running the entry point defined in `pyproject.toml`, you can generally run your code locally by doing the same (it should already be installed in your conda environment in the development steps listed above). You can run it via VS Code's debugger as well running it as a module. A `.main` entry point is predefined in `.vscode/launch.json` (be sure to update `skidname` to match the folder name under `/src`).
 
 To test it in the Docker container's environment, you can run use the `Dockerfile` to create a container and run it locally using a tool like [Podman](https://podman.io/).
 
