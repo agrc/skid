@@ -102,7 +102,7 @@ def _remove_log_file_handlers(log_name, loggers):
     """
 
     for logger in loggers:
-        for handler in logger.handlers:
+        for handler in logger.handlers[:]:
             if isinstance(handler, logging.FileHandler) and Path(handler.baseFilename).name == log_name:
                 logger.removeHandler(handler)
                 handler.close()

@@ -30,7 +30,7 @@ This all presumes you're working in Visual Studio Code.
 1. Install the skid in your conda environment as an editable package for development
    - This will install all the normal and development dependencies (palletjack, supervisor, etc)
    - `cd c:\path\to\repo`
-   - `pip install -e .[tests]`
+   - `pip install -e .[dev]`
    - add any additional project requirements to the `project.dependencies` list in `pyproject.toml`
 1. Set config variables and secrets
    - `secrets.json` holds passwords, secret keys, etc, and will not (and should not) be tracked in git
