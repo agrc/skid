@@ -6,7 +6,6 @@ import json
 import logging
 import sys
 from datetime import datetime, timezone
-from importlib.metadata import version
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from types import SimpleNamespace
@@ -15,6 +14,8 @@ import arcgis
 from palletjack import extract, load, transform, utils
 from supervisor.message_handlers import SendGridHandler
 from supervisor.models import MessageDetails, Supervisor
+
+from skidname import __version__
 
 from . import config
 
@@ -85,9 +86,7 @@ def _initialize(log_path, sendgrid_api_key):
     sendgrid_settings = config.SENDGRID_SETTINGS
     sendgrid_settings["api_key"] = sendgrid_api_key
     skid_supervisor.add_message_handler(
-        SendGridHandler(
-            sendgrid_settings=sendgrid_settings, client_name=config.SKID_NAME, client_version=version("skidname")
-        )
+        SendGridHandler(sendgrid_settings=sendgrid_settings, client_name=config.SKID_NAME, client_version=__version__)
     )
 
     return skid_supervisor
