@@ -23,7 +23,8 @@ Homepage = "https://github.com/agrc/skid"
 "Issue Tracker" = "https://github.com/agrc/skid/issues"
 
 [project.optional-dependencies]
-tests = [
+dev = [
+  "build>=1",
   "pytest-cov>=6",
   "pytest-instafail==0.5.*",
   "pytest-mock==3.*",
@@ -49,4 +50,4 @@ minversion = "6.0"
 testpaths = ["tests", "src"]
 norecursedirs = [".env", "data", "maps", ".github", ".vscode"]
 console_output_style = "count"
-addopts = "--cov-branch --cov=skidname-skid --cov-report term --cov-report xml:cov.xml --instafail"
+addopts = "--cov-branch --cov=skidname --cov-report term --cov-report xml:cov.xml --instafail"
